@@ -128,6 +128,17 @@
 >
 > 本模式禁止改写 Android 的 `boot`、`vendor`、`cust`、`userdata`、`dtbo` 和 `vbmeta`。
 
+当前设备检查结果：
+
+- `mindowsesp` 是 FAT32，约 300 MiB；`mindowsdat` / `mindowswin` 是 NTFS。
+- 当前 Android `boot` 是原生 Android boot image，带 Android kernel 和 ramdisk，不是 U-Boot。
+- Raphael U-Boot 的默认路径是 `scsi scan` 后执行 `bootefi bootmgr`，预编译镜像包含
+  `sm8150-xiaomi-raphael` 设备树。
+
+因此，`fastboot boot u-boot.img` 只能作为**不写分区的临时启动测试**。它不能使 Linux
+永久成为默认系统；若要同时保留 Android 并实现持久化启动，需要另行实现 Android
+boot image 的回退/链式启动，未完成前不得把 U-Boot 写入 Android `boot`。
+
 运行只读预检：
 
 ```bash
