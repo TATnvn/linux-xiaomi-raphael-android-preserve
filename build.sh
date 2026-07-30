@@ -43,6 +43,11 @@ export HOSTNAME="xiaomi-raphael"
 export BOOT_IMG="xiaomi-k20pro-boot.img"
 export KERNEL_DEBS_DIR="xiaomi-raphael-debs_$KERNEL_VERSION"
 
+# Android-preserve layout. These are Windows-created partitions on the
+# current dual-boot layout; do not silently fall back to Android userdata.
+export ROOT_PARTLABEL="${ROOT_PARTLABEL:-mindowsdat}"
+export BOOT_PARTLABEL="${BOOT_PARTLABEL:-mindowsesp}"
+
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
 export DEBIAN_FRONTEND="noninteractive"
 export SYSTEM_TYPE

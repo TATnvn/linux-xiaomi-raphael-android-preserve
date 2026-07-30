@@ -3,6 +3,7 @@ set -e
 
 IMAGE_NAME="${IMAGE_NAME:-rootfs.img}"
 IMAGE_UUID="${IMAGE_UUID:-ee8d3593-59b1-480e-a3b6-4fefb17ee7d8}"
+ROOT_PARTLABEL="${ROOT_PARTLABEL:-mindowsdat}"
 
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] 📦 卸载并完成镜像"
 
@@ -21,6 +22,6 @@ e2fsck -f -y ${IMAGE_NAME}
 tune2fs -U ${IMAGE_UUID} ${IMAGE_NAME}
 
 echo ""
-echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ Legacy boot cmdline: root=PARTLABEL=userdata"
+echo "[$(date +'%Y-%m-%d %H:%M:%S')]   └─ Root partition: root=PARTLABEL=${ROOT_PARTLABEL}"
 
 echo "[$(date +'%Y-%m-%d %H:%M:%S')] ✅ 镜像完成"

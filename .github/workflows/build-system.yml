@@ -64,6 +64,8 @@ on:
 env:
   HOSTNAME: xiaomi-raphael
   BOOT_IMG: xiaomi-k20pro-boot.img
+  ROOT_PARTLABEL: mindowsdat
+  BOOT_PARTLABEL: mindowsesp
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   SUPPRESS_DEPRECATION_WARNINGS: true
 

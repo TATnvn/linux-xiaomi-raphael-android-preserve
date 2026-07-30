@@ -109,6 +109,34 @@
 
 ## 🔧 安装教程
 
+### ⚠️ Android 保留模式（本 fork 的目标）
+
+本 fork 面向已经安装 WOA 双系统、希望**保留 Android，只把 Windows 分区改作 Linux**的设备。
+
+默认生成的 rootfs 使用以下分区标签：
+
+| 用途 | 分区标签 | 当前设备对应分区 |
+|:---|:---|:---|
+| Linux 根文件系统 | `mindowsdat` | 原 Windows 数据分区 |
+| Linux `/boot` | `mindowsesp` | 原 Windows EFI 分区 |
+
+构建脚本通过 `ROOT_PARTLABEL` / `BOOT_PARTLABEL` 生成 `/etc/fstab`，默认值分别为
+`mindowsdat` / `mindowsesp`。这两个分区目前在你的设备上约为 240 GiB / 300 MiB。
+
+> ⚠️ 当前仍处于实验阶段。U-Boot 是预编译镜像，仓库尚未验证它是否会扫描
+> `mindowsesp`，也尚未实现 Android 的启动菜单。因此暂时**不要刷写任何镜像**。
+>
+> 本模式禁止改写 Android 的 `boot`、`vendor`、`cust`、`userdata`、`dtbo` 和 `vbmeta`。
+
+运行只读预检：
+
+```bash
+chmod +x scripts/android-preserve-preflight.sh
+scripts/android-preserve-preflight.sh
+```
+
+只有完成 U-Boot 启动路径验证后，才会加入实际安装脚本。
+
 ### 前置条件
 
 - ✅ 设备已完成 **Bootloader 解锁**
@@ -118,25 +146,19 @@
   - `xiaomi-k20pro-boot.img` — 内核镜像
   - [u-boot.img](https://github.com/GengWei1997/linux-xiaomi-raphael-uboot/releases/tag/v1.0.0) — U-Boot 引导
 
-### 刷机命令
+### 原始 Linux-only 安装命令（本 fork 禁用）
+
+上游示例会擦除 `boot`、`dtbo`、`cache`、`userdata`，并将 U-Boot 和 rootfs 写入
+Android 分区。该流程会破坏本 fork 要保留的 Android 启动链和数据，**不要执行**：
 
 ```bash
-# 1. 进入 Fastboot 模式
-adb reboot bootloader
-
-# 2. 擦除分区
-fastboot erase dtbo
-fastboot erase boot
-fastboot erase cache
-fastboot erase userdata
-
-# 3. 刷入镜像
-fastboot flash cache xiaomi-k20pro-boot.img
-fastboot flash boot u-boot.img
-fastboot flash userdata rootfs.img
-
-# 4. 重启设备
-fastboot reboot
+# fastboot erase dtbo
+# fastboot erase boot
+# fastboot erase cache
+# fastboot erase userdata
+# fastboot flash cache xiaomi-k20pro-boot.img
+# fastboot flash boot u-boot.img
+# fastboot flash userdata rootfs.img
 ```
 
 ## ❓ 常见问题
